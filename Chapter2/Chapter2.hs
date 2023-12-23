@@ -216,3 +216,22 @@ handleNums l =
         | even x -> "a singleton list containing an even number"
         | otherwise -> "the list contains " <> (show x)
     _list -> "the list has more than 1 element"
+
+-- co-recursion
+radsToDegrees :: Float -> Int
+radsToDegrees radians =
+  let
+    pi = 3.14
+    degrees = cycle [0..359]
+    converted = truncate $ (radians * 360) / 2 * pi
+  in
+    degrees !! converted
+  
+epicCycle inputList =
+  cycleHelper inputList
+  where
+    cycleHelper [] = epicCycle inputList
+    cycleHelper (x:xs) = x : cycleHelper xs
+
+moreEpicCycle inputList =
+  inputList <> moreEpicCycle inputList
