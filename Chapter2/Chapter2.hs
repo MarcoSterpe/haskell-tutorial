@@ -141,3 +141,78 @@ pairwiseSum xs ys =
     map sumElems $ zip xs ys
 
 pairwiseSum' xs ys = map (uncurry (+)) $ zip xs ys
+
+-- Patter Matching
+
+customGreeting "George" = "Oh, hey George!"
+customGreeting name = "Hello, " <> name
+
+matchTuple ("hello", "world") = "Hello there, you great big world"
+matchTuple ("hello", name) = "Oh, hi there, " <> name
+matchTuple (salutation, "George") = "Oh! " <> salutation <> " George!"
+matchTuple n = show n
+
+addValues [] = 0
+addValues (first:rest) = first + (addValues rest)
+
+fibs :: Int -> Int
+fibs n
+  | n == 0 = -1
+  | n == 1 = 0
+  | n == 2 = 1
+  | otherwise = findFibs n 3 0 1
+  where
+    findFibs n index fst snd
+      | n == index = fst + snd
+      | otherwise = findFibs n (index + 1 ) (snd) (fst + snd)
+
+primes :: Int -> Int
+primes n
+  | n == 0 = -1
+  | otherwise = primes' n [1] 2 [1]
+    where
+      primes' :: Int -> [Int] -> Int -> [Int] -> Int 
+      primes' n lst cur curLst
+        | n == (length lst) = head lst
+        | (isPrime cur curLst) == True =
+          let
+            lst' = cur : lst
+          in
+            primes' n lst' cur lst'
+        | otherwise = primes' n lst (cur + 1) lst
+
+isPrime :: Int -> [Int] -> Bool     
+isPrime cur lst
+  | lst == [1] = True
+  | (cur `rem` (head lst)) == 0 = False
+  | otherwise = isPrime cur (tail lst)
+
+fancyNumbers n = 
+  let
+    fib = fibs n
+    prime = primes n
+  in
+    "The fibonacci number is: " <> show fib <> " and the prime is: " <> show prime
+
+-- @ for original value
+-- _ for ignored value
+printHead [] = "empty!"
+printHead lst@(hd:_tail) =
+  "the head of " <> (show lst) <> " is " <> show hd
+
+-- Switch case
+favoriteFood person =
+  case person of
+    "Ren" -> "Tofu"
+    "Rebecca" -> "Falafel"
+    "George" -> "Banana"
+    name -> "I Don't Know what " <> name <> " likes!"
+
+handleNums l =
+  case l of
+    [] -> "An empty list"
+    [x] | x == 0 -> "a list called: [0]"
+        | x == 1 -> "a singular list of [1]"
+        | even x -> "a singleton list containing an even number"
+        | otherwise -> "the list contains " <> (show x)
+    _list -> "the list has more than 1 element"
