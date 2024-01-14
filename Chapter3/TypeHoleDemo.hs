@@ -8,3 +8,29 @@ getFiveNumbers = take 5 _
 
 getFiveNumbers' :: [Int]
 getFiveNumbers' = let quantity = 5 in take quantity _
+
+permuteThruple :: (a,b,c) -> ((a,b,c),(a,c,b),(b,a,c),(b,c,a),(c,a,b),(c,b,a))
+permuteThruple (a,b,c) = ((a,b,c),(a,c,b),(b,a,c),(b,c,a),(c,a,b),(c,b,a))
+
+mergeFirstTwo :: (a,b,c) -> (a -> b -> d) -> (d,c)
+mergeFirstTwo (a,b,c) f = (f a b, c)
+
+showFields :: String
+showFields =
+  let (a,b) = combinePermutations . permuteThruple $ _
+  in unlines [fst a, fst b]
+  where
+    joinFields a b = show a <> " - " <> b
+    combinePermutations (a,b,c,d,e,f) =
+      ( mergeFirstTwo a joinFields
+      , mergeFirstTwo c joinFields
+      )
+
+showStringPair :: (String,String) -> String
+showStringPair (a,b) = "fst: " <> a <> ", snd: " <> b
+
+doubleField :: a -> (a,a)
+doubleField a = (a,a)
+
+showValues :: String
+showValues = unlines $ map (showStringPair . _doubleField . show) [1..10]
